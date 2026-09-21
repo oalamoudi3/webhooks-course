@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZAWAYA SBK TV Test</title>
+<style>
+html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#eee4d2;font-family:Arial,Tahoma,sans-serif}
+#stage{position:relative;width:100%;height:100%;min-height:600px;background:#eee4d2}
+.box{position:absolute;border:3px solid #b58b49;background:#fff8eb;color:#3f2a11;text-align:center;overflow:hidden}
+.title{font-size:28px;font-weight:bold;padding:20px 10px;background:#ead7b2}
+.big{font-size:64px;font-weight:bold;margin-top:45px;direction:ltr}
+.note{font-size:20px;margin-top:10px;color:#765d39}
+#gold{left:2.5%;top:8%;width:36%;height:32%}
+#slides{left:40%;top:8%;width:38%;height:32%}
+#silver{left:2.5%;top:48%;width:36%;height:30%}
+#live{left:40%;top:48%;width:38%;height:30%;background:#111;color:#fff;border-color:#666}
+#side{right:2.5%;top:8%;width:16%;height:70%}
+#clock,#date{position:absolute;bottom:5%;height:54px;line-height:54px;background:#fff8eb;border:2px solid #b58b49;text-align:center;font-weight:bold;direction:ltr}
+#clock{left:7%;width:15%;font-size:30px}
+#date{left:24%;width:17%;font-size:26px}
+.logo{width:110px;height:110px;border-radius:60px;border:4px solid #b58b49;margin:55px auto 25px;line-height:110px;font-size:34px;font-weight:bold}
+@media(max-width:900px){.title{font-size:18px}.big{font-size:38px}.note{font-size:14px}.logo{width:70px;height:70px;line-height:70px;font-size:22px;margin-top:25px}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="gold" class="box"><div class="title">GOLD PRICE / سعر الذهب</div><div class="big">3,650.25</div><div class="note">Gold iframe placeholder</div></div>
+  <div id="slides" class="box"><div class="title">PRODUCT SLIDESHOW</div><div class="big" style="font-size:42px">IMAGE</div><div class="note">Slideshow placeholder</div></div>
+  <div id="silver" class="box"><div class="title">SILVER PRICE / سعر الفضة</div><div class="big">42.80</div><div class="note">Silver iframe placeholder</div></div>
+  <div id="live" class="box"><div class="title" style="background:#222;color:#fff">LIVE TV</div><div class="big" style="font-size:44px">CNBC</div><div class="note" style="color:#ccc">Video placeholder</div></div>
+  <div id="side" class="box"><div class="logo">SBK</div><div class="title" style="background:transparent">ZAWAYA SBK</div><div class="note">TV compatibility test</div></div>
+  <div id="clock">--:--:--</div>
+  <div id="date">----/--/--</div>
+</div>
+<script>
+(function(){
+function p(n){return n<10?'0'+n:n}
+function t(){
+ var n=new Date(),r=new Date(n.getTime()+n.getTimezoneOffset()*60000+3*60*60000);
+ document.getElementById('clock').innerHTML=p(r.getHours())+':'+p(r.getMinutes())+':'+p(r.getSeconds());
+ document.getElementById('date').innerHTML=r.getFullYear()+'-'+p(r.getMonth()+1)+'-'+p(r.getDate());
+}
+t();setInterval(t,1000);
+})();
+</script>
+</body>
+</html>
