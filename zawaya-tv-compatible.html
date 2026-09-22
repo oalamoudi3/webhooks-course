@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>ZAWAYA SBK Display</title>
+<style>
+html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#efe5d4;font-family:Arial,Tahoma,sans-serif}
+#viewport{position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden;background:#efe5d4}
+#stage{position:absolute;left:0;top:0;width:1640px;height:920px;overflow:hidden;background:#efe5d4 url('https://tvgoldsbk.netlify.app/assets/theme.png') center center no-repeat;background-size:1640px 920px;-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0}
+.panel{position:absolute;overflow:hidden;background:transparent}
+.gold-slot{left:40px;top:92px;width:592px;height:305px}
+.slideshow{left:594px;top:44px;width:671px;height:317px;background:#fff}
+.silver-slot{left:40px;top:467px;width:592px;height:292px}
+.live-slot{left:594px;top:375px;width:671px;height:368px;background:#111}
+.tv-area{position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden;background:transparent}
+.tv-embed{position:absolute;left:50%;top:50%;width:350px;height:126px;margin-left:-175px;margin-top:-63px;-webkit-transform:scale(1.90);-ms-transform:scale(1.90);transform:scale(1.90);-webkit-transform-origin:center center;-ms-transform-origin:center center;transform-origin:center center}
+.tv-embed iframe{display:block;width:350px;height:126px;border:0;overflow:hidden;background:transparent}
+.widget-loading{position:absolute;left:0;top:0;width:100%;height:100%;text-align:center;color:#76521d;font-size:22px;font-weight:bold;line-height:260px;background:transparent}
+.slide{position:absolute;left:0;top:0;width:100%;height:100%;display:none;background:#fff}
+.slide.active{display:block}
+.slide img{position:absolute;left:0;top:0;width:100%;height:100%;border:0}
+#liveFrame{position:absolute;left:0;top:0;width:100%;height:100%;border:0;display:block;background:#111}
+.live-message{position:absolute;left:0;top:0;width:100%;height:100%;display:none;text-align:center;background:#111;color:#fff;z-index:3}
+.live-message .inner{position:absolute;left:0;top:135px;width:100%;font-size:22px;line-height:1.7}
+.live-message a{color:#fff;text-decoration:underline}
+.clock,.date{position:absolute;top:810px;height:46px;line-height:46px;text-align:center;direction:ltr;color:#3b2513;font-weight:bold;white-space:nowrap;z-index:20}
+.clock{left:117px;width:176px;font-size:27px}
+.date{left:390px;width:194px;font-size:24px}
+.no-bg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:-1;background:#efe5d4}
+</style>
+</head>
+<body>
+<div id="viewport">
+<main id="stage" aria-label="ZAWAYA SBK showroom display">
+  <div class="no-bg"></div>
+  <section class="panel gold-slot" aria-label="Gold price">
+    <div class="tv-area"><div id="goldLoading" class="widget-loading">جاري تحميل سعر الذهب...</div><div id="goldEmbed" class="tv-embed"></div></div>
+  </section>
+  <section id="slideshow" class="panel slideshow" aria-label="Products"><div id="slideHost"></div></section>
+  <section class="panel silver-slot" aria-label="Silver price">
+    <div class="tv-area"><div id="silverLoading" class="widget-loading">جاري تحميل سعر الفضة...</div><div id="silverEmbed" class="tv-embed"></div></div>
+  </section>
+  <section class="panel live-slot" aria-label="CNBC Arabia live">
+    <video id="liveFrame" autoplay muted playsinline webkit-playsinline preload="metadata"></video>
+    <div id="liveMessage" class="live-message"><div class="inner"><div id="liveText">اضغط لتشغيل البث المباشر</div><div><a href="https://www.cnbcarabia.com/tv" target="_blank">فتح CNBC عربية</a></div></div></div>
+  </section>
+  <div id="clock" class="clock" aria-label="Riyadh time">--:--:--</div>
+  <div id="date" class="date" aria-label="Date">----/--/--</div>
+</main>
+</div>
+<script>
+(function(){
+'use strict';
+var DESIGN_W=1640,DESIGN_H=920,stage=document.getElementById('stage');
+function fitStage(){var de=document.documentElement,vw=window.innerWidth||de.clientWidth||DESIGN_W,vh=window.innerHeight||de.clientHeight||DESIGN_H,sx=vw/DESIGN_W,sy=vh/DESIGN_H,scale=sx<sy?sx:sy,left=(vw-(DESIGN_W*scale))/2,top=(vh-(DESIGN_H*scale))/2;stage.style.left=Math.round(left)+'px';stage.style.top=Math.round(top)+'px';stage.style.webkitTransform='scale('+scale+')';stage.style.msTransform='scale('+scale+')';stage.style.transform='scale('+scale+')'}
+function two(n){return n<10?'0'+n:String(n)}
+function updateClock(){var now=new Date(),r=new Date(now.getTime()+(now.getTimezoneOffset()*60000)+(3*60*60000)),c=document.getElementById('clock'),d=document.getElementById('date');if(c){c.innerHTML=two(r.getHours())+':'+two(r.getMinutes())+':'+two(r.getSeconds())}if(d){d.innerHTML=r.getFullYear()+'-'+two(r.getMonth()+1)+'-'+two(r.getDate())}}
+var slideFiles=['01_naif_weights.png','02_pamp.png','03_btc_riyadh.png','04_naif_palm.png','05_saudi_map.png','06_bracelet.png','07_kids.png','08_samir.png','09_silver.png','10_naif_tola.png','11_suisse_coin.png','12_swiss_kilo.png'],slideBase='https://tvgoldsbk.netlify.app/assets/slides/',slideHost=document.getElementById('slideHost'),slides=[],currentSlide=0;
+function addSlide(index){if(index<0||index>=slideFiles.length||slides[index]){return}var wrap=document.createElement('div'),img=document.createElement('img');wrap.className='slide'+(index===0?' active':'');img.alt='';img.src=slideBase+slideFiles[index];wrap.appendChild(img);slideHost.appendChild(wrap);slides[index]=wrap;if(index+1<slideFiles.length){setTimeout(function(){addSlide(index+1)},700)}}
+function rotateSlides(){if(!slides[currentSlide]){return}slides[currentSlide].className='slide';currentSlide++;if(currentSlide>=slideFiles.length){currentSlide=0}if(!slides[currentSlide]){currentSlide=0}slides[currentSlide].className='slide active'}
+function enc(obj){var s='{',first=true,k;for(k in obj){if(obj.hasOwnProperty(k)){if(!first){s+=','}first=false;s+='"'+k+'":';if(typeof obj[k]==='string'){s+='"'+obj[k].replace(/"/g,'\"')+'"'}else{s+=String(obj[k])}}}s+='}';return encodeURIComponent(s)}
+function loadQuote(targetId,loadingId,symbol){var host=document.getElementById(targetId),loading=document.getElementById(loadingId);if(!host){return}var cfg={symbol:symbol,width:350,locale:'en',colorTheme:'light',isTransparent:true},iframe=document.createElement('iframe');iframe.setAttribute('scrolling','no');iframe.setAttribute('frameborder','0');iframe.setAttribute('allowtransparency','true');iframe.src='https://s.tradingview.com/embed-widget/single-quote/?locale=en#'+enc(cfg);iframe.onload=function(){if(loading){loading.style.display='none'}};host.appendChild(iframe);setTimeout(function(){if(loading){loading.style.display='none'}},12000)}
+var streamUrl='https://cnbc-live.akamaized.net/cnbc/master.m3u8',video=document.getElementById('liveFrame'),liveMessage=document.getElementById('liveMessage'),liveText=document.getElementById('liveText'),hlsInstance=null;
+function showLiveMessage(text){if(liveText){liveText.innerHTML=text||'اضغط لتشغيل البث المباشر'}if(liveMessage){liveMessage.style.display='block'}}
+function hideLiveMessage(){if(liveMessage){liveMessage.style.display='none'}}
+function attemptPlay(){if(!video){return}try{var p=video.play();if(p&&typeof p.then==='function'){p.then(hideLiveMessage).catch(function(){showLiveMessage('اضغط لتشغيل البث المباشر')})}}catch(e){showLiveMessage('اضغط لتشغيل البث المباشر')}}
+function startWithHlsJs(){if(window.Hls&&window.Hls.isSupported&&window.Hls.isSupported()){try{hlsInstance=new window.Hls({enableWorker:false,lowLatencyMode:false,backBufferLength:30});hlsInstance.loadSource(streamUrl);hlsInstance.attachMedia(video);hlsInstance.on(window.Hls.Events.MANIFEST_PARSED,function(){attemptPlay()});hlsInstance.on(window.Hls.Events.ERROR,function(evt,data){if(data&&data.fatal){showLiveMessage('تعذر تشغيل البث داخل هذا المتصفح')}});return true}catch(e){}}return false}
+function loadHlsLibrary(url,backup){var s=document.createElement('script');s.src=url;s.async=true;s.onload=function(){if(!startWithHlsJs()&&backup){loadHlsLibrary(backup,null)}};s.onerror=function(){if(backup){loadHlsLibrary(backup,null)}else{showLiveMessage('تعذر تشغيل البث داخل هذا المتصفح')}};document.getElementsByTagName('head')[0].appendChild(s)}
+function startLive(){if(!video){return}video.muted=true;video.autoplay=true;try{video.setAttribute('playsinline','');video.setAttribute('webkit-playsinline','')}catch(e){}video.onplaying=hideLiveMessage;video.onerror=function(){if(!window.Hls){loadHlsLibrary('https://cdn.jsdelivr.net/npm/hls.js@0.14.17/dist/hls.min.js','https://unpkg.com/hls.js@0.14.17/dist/hls.min.js')}};var nativeType='';try{nativeType=video.canPlayType('application/vnd.apple.mpegurl')||video.canPlayType('application/x-mpegURL')}catch(e){}if(nativeType){video.src=streamUrl;attemptPlay()}else{loadHlsLibrary('https://cdn.jsdelivr.net/npm/hls.js@0.14.17/dist/hls.min.js','https://unpkg.com/hls.js@0.14.17/dist/hls.min.js')}}
+if(liveMessage){liveMessage.onclick=function(){hideLiveMessage();attemptPlay()}}
+fitStage();updateClock();addSlide(0);setInterval(updateClock,1000);setInterval(rotateSlides,5000);if(window.addEventListener){window.addEventListener('resize',fitStage,false)}else if(window.attachEvent){window.attachEvent('onresize',fitStage)}
+setTimeout(function(){loadQuote('goldEmbed','goldLoading','OANDA:XAUUSD')},500);
+setTimeout(function(){loadQuote('silverEmbed','silverLoading','OANDA:XAGUSD')},1200);
+setTimeout(startLive,2200);
+})();
+</script>
+</body>
+</html>
